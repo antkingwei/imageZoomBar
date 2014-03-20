@@ -7,6 +7,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.RectF;
 import android.text.SpannableString;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -19,8 +20,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final String TAG = "NoBoringActionBarActivity";
-    
+    private static final String TAG = "NoBoringActionBarActivity";    
     private int mActionBarTitleColor;
     private int mActionBarHeight;
     private int mHeaderHeight;
@@ -30,23 +30,19 @@ public class MainActivity extends Activity {
     private ImageView mHeaderLogo;
     private View mHeader;
     private View mPlaceHolderView;
-    private AccelerateDecelerateInterpolator mSmoothInterpolator;
-    
+    private AccelerateDecelerateInterpolator mSmoothInterpolator;    
     private RectF mRect1 = new RectF();
-    private RectF mRect2 = new RectF();
-    
+    private RectF mRect2 = new RectF();    
     private AlphaForegroundColorSpan mAlphaForegroundColorSpan;
-    private SpannableString mSpannableString;
-    
-    private TypedValue mTypedValue = new TypedValue();
-    
-
+    private SpannableString mSpannableString;    
+    private TypedValue mTypedValue = new TypedValue();   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSmoothInterpolator = new AccelerateDecelerateInterpolator();
         mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.header_height);
         mMinHeaderTranslation = -mHeaderHeight + getActionBarHeight();
+        Log.e("antking_height", mMinHeaderTranslation+"");
         
         setContentView(R.layout.activity_main);
         
@@ -92,6 +88,8 @@ public class MainActivity extends Activity {
                     int totalItemCount) {
                 // TODO Auto-generated method stub
                 int scrollY = getScrollY();
+                Log.e("antking-scrollY", Math.max(-scrollY, mMinHeaderTranslation)+"");
+                
                 mHeader.setTranslationY(Math.max(-scrollY, mMinHeaderTranslation));
                 
                 float ratio = clamp(mHeader.getTranslationY()/mMinHeaderTranslation,0.0f,1.0f);
@@ -162,6 +160,7 @@ public class MainActivity extends Activity {
         }
         getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
         mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources().getDisplayMetrics());
+        Log.e("antking-actionbar", mActionBarHeight+"");
         return mActionBarHeight;
     }
 
